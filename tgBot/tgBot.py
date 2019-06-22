@@ -1,8 +1,7 @@
 import telebot
 import urllib.request
-from flask import Flask, request
 import os
-
+from flask import Flask
 
 bot_token = '835075644:AAERQCEPXSjpc-Z9SvZFPFcbPXNfiLUS3QI'
 bot = telebot.TeleBot(token=bot_token)
