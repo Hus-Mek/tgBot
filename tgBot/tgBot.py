@@ -31,7 +31,7 @@ def send_photo(message):
     bot.send_photo(message.chat.id,img, reply_to_message_id=message.message_id)
     img.close
 
-@server.route('/' + TOKEN, methods=['POST'])
+@server.route('/' + bot_token, methods=['POST'])
 def getMessage():
     bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
     return "!", 200
@@ -40,7 +40,7 @@ def getMessage():
 @server.route("/")
 def webhook():
     bot.remove_webhook()
-    bot.set_webhook(url='https://your_heroku_project.com/' + TOKEN)
+    bot.set_webhook(url=' https://botttg.herokuapp.com/' + bot_token)
     return "!", 200
 
 
