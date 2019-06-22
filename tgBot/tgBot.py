@@ -28,13 +28,9 @@ def send_welcome(message):
 @bot.message_handler(func=lambda m: True)
 def send_photo(message): 
     dl(message.text)
-    bot.send_chat_action(message.chat.id, 'upload photo')
+    #bot.send_chat_action(message.chat.id, 'upload photo')
     img = open('pic.jpg','rb')
-    bot.sendphoto(message.chat.id,img, reply_to_message_id=message.message_id)
+    bot.send_photo(message.chat.id,img, reply_to_message_id=message.message_id)
     img.close
 
-while True:
-    try:
-        bot.polling()
-    except Exception:
-        time.sleep(15)
+bot.polling()
