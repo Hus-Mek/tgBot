@@ -32,7 +32,7 @@ def send_photo():
     for i in range(0,20):
         dl(url_arr[i])
         img = open('pic.jpg','rb')
-        bot.send_photo(chat_id ='@Memesandautism',photo = img)
+        bot.send_photo(chat_id ='@testingbottg',photo = img)
         img.close
 
 
@@ -45,7 +45,7 @@ def send_welcome(message):
 def send_welcome(message):
     bot.reply_to(message, 'Hit /send')
 
-@bot.message_handler(commands = ['send'])
+@bot.message_handler(func=lambda message: 'send 384252204' in message.text)
 def every24(message):
         send_photo()
         
