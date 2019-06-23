@@ -1,10 +1,21 @@
 import telebot
 import urllib.request
 import os
-from flask import Flask
+import praw 
 
 bot_token = '835075644:AAERQCEPXSjpc-Z9SvZFPFcbPXNfiLUS3QI'
 bot = telebot.TeleBot(token=bot_token)
+reddit = praw.Reddit(client_id= 'D1O4NdmXoZVNpg', client_secret= 'voQJq4BVb4DWL8WMFCsmiZRzou4', username= 'tgdankbot', password= 'Kutaluta@3crest', user_agent= 'v1' )
+subreddit = reddit.subreddit('dankmemes')
+hot_memes = subreddit.top('day', limit=20)
+url_arr = []
+
+
+
+def update_urls():
+    for submission in hot_memes:
+        if not submission.stickied:
+            url_arr.append(submission.url)
 
 
 def dl(url):
@@ -20,15 +31,17 @@ def send_welcome(message):
 
 @bot.message_handler(commands = ['help'])
 def send_welcome(message):
-    bot.reply_to(message, 'Send a url')
+    bot.reply_to(message, 'Hit /send')
 
-@bot.message_handler(func=lambda m: True)
+@bot.message_handler(commands = ['send'])
 def send_photo(message): 
-    dl(message.text)
-    #bot.send_chat_action(message.chat.id, 'upload photo')
-    img = open('pic.jpg','rb')
-    bot.send_photo(message.chat.id,img, reply_to_message_id=message.message_id)
-    img.close
+    update_urls()
+    for i in range(0,20):
+     dl(url_arr[i])
+     img = open('pic.jpg','rb')
+     bot.send_photo(message.chat.id,img, reply_to_message_id=message.message_id)
+     img.close
+
 def listener(messages):
     for m in messages:
         print(str(m))
