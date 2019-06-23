@@ -7,19 +7,32 @@ import threading
 bot_token = '835075644:AAERQCEPXSjpc-Z9SvZFPFcbPXNfiLUS3QI'
 bot = telebot.TeleBot(token=bot_token)
 reddit = praw.Reddit(client_id= 'D1O4NdmXoZVNpg', client_secret= 'voQJq4BVb4DWL8WMFCsmiZRzou4', username= 'tgdankbot', password= 'Kutaluta@3crest', user_agent= 'v1' )
-subreddit = reddit.subreddit('dankmemes')
-hot_memes = subreddit.top('day',limit=20)
-url_arr = [None]*20
+sub1 = reddit.subreddit('dankmemes')
+sub2 = reddit.subreddit('youngpeopleyoutube')
+sub3 = reddit.subreddit('cursedcomments')
+sub4 = reddit.subreddit('cursedimages')
+hot_memes = sub1.top('day',limit=10)
+hot_yout = sub2.top('day', limit=5)
+hot_curcom = sub3.top('day',limit=5)
+hot_curimg = sub4.top('day', limit=5)
+url_arr = []
 
 
 
 def update_urls():
-    i = 0
+    del url_arr[:]
     for submission in hot_memes:
         if not submission.stickied:
-            url_arr[i] = (submission.url)
-            i += 1
-
+            url_arr.append(submission.url)
+    for submission in hot_yout:
+        if not submission.stickied:
+            url_arr.append(submission.url)
+    for submission in hot_curcom:
+        if not submission.stickied:
+           url_arr.append(submission.url)
+    for submission in hot_curimg:
+        if not submission.stickied:
+           url_arr.append(submission.url)
 
 def dl(url):
     f = open('pic.jpg', 'wb')
@@ -29,7 +42,8 @@ def dl(url):
 def send_photo(): 
     threading.Timer(88400,send_photo).start()
     update_urls()
-    for i in range(0,20):
+    count = len(url_arr) 
+    for i in range(0,count):
         dl(url_arr[i])
         img = open('pic.jpg','rb')
         bot.send_photo(chat_id ='@testingbottg',photo = img)
