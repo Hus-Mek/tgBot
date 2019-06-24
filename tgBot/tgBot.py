@@ -3,6 +3,7 @@ import urllib.request
 import os
 import praw 
 import threading
+from flask import Flask, request
 
 bot_token = '835075644:AAERQCEPXSjpc-Z9SvZFPFcbPXNfiLUS3QI'
 bot = telebot.TeleBot(token=bot_token)
@@ -11,28 +12,30 @@ sub1 = reddit.subreddit('dankmemes')
 sub2 = reddit.subreddit('youngpeopleyoutube')
 sub3 = reddit.subreddit('cursedcomments')
 sub4 = reddit.subreddit('cursedimages')
-hot_memes = sub1.top('day',limit=10)
-hot_yout = sub2.top('day', limit=5)
-hot_curcom = sub3.top('day',limit=5)
-hot_curimg = sub4.top('day', limit=5)
+hot_memes = sub1.hot(limit=10)
+hot_yout = sub2.hot(limit=7)
+hot_curcom = sub3.hot(limit=7)
+hot_curimg = sub4.hot(limit=2)
 url_arr = []
+server = Flask(__name__)
 
 
 
 def update_urls():
     del url_arr[:]
     for submission in hot_memes:
-        if not submission.stickied:
+        if not submission.stickied and 'jpg' in submission.url:
             url_arr.append(submission.url)
     for submission in hot_yout:
-        if not submission.stickied:
+        if not submission.stickied and 'jpg' in submission.url:
             url_arr.append(submission.url)
     for submission in hot_curcom:
-        if not submission.stickied:
+        if not submission.stickied and 'jpg' in submission.url:
            url_arr.append(submission.url)
     for submission in hot_curimg:
-        if not submission.stickied:
-           url_arr.append(submission.url)
+        if not submission.stickied and 'jpg' in submission.url:
+            url_arr.append(submission.url)
+    print(len(url_arr))
 
 def dl(url):
     f = open('pic.jpg', 'wb')
@@ -40,13 +43,13 @@ def dl(url):
     f.close
 
 def send_photo(): 
-    threading.Timer(88400,send_photo).start()
+    threading.Timer(44000,send_photo).start()
     update_urls()
     count = len(url_arr) 
-    for i in range(0,count):
+    for i in range(0,count-1):
         dl(url_arr[i])
         img = open('pic.jpg','rb')
-        bot.send_photo(chat_id ='@testingbottg',photo = img)
+        bot.send_photo(chat_id ='@memesandautism',photo = img)
         img.close
 
 
@@ -63,10 +66,17 @@ def send_welcome(message):
 def every24(message):
         send_photo()
         
-def listener(messages):
-    for m in messages:
-        print(str(m))
+@server.route('/' + bot_token, methods=['POST'])
+def getMessage():
+    bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
+    return "!", 200
 
 
-bot.set_update_listener(listener)
-bot.polling()
+@server.route("/")
+def webhook():
+    bot.remove_webhook()
+    bot.set_webhook(url='https://dankmemes-bot.herokuapp.com/' + bot_token)
+    return "!", 200
+
+if __name__ == "__name__":
+    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 8000)))
