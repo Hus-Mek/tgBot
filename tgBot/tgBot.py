@@ -39,7 +39,7 @@ def dl(url):
     f.close
 
 def send_photo(): 
-    threading.Timer(44000,send_photo).start()
+    threading.Timer(16000,send_photo).start()
     update_urls()
     count = len(url_arr) 
     for i in range(0,count-1):
