@@ -14,7 +14,7 @@ sub3 = reddit.subreddit('cursedcomments')
 sub4 = reddit.subreddit('cursedimages')
 hot_memes = sub1.hot(limit=10)
 hot_yout = sub2.hot(limit=7)
-hot_curcom = sub3.hot(limit=7)
+hot_curcom = sub3.hot(limit=5)
 url_arr = []
 server = Flask(__name__)
 
@@ -48,6 +48,10 @@ def send_photo():
         bot.send_photo(chat_id ='@memesandautism',photo = img)
         img.close
 
+def keep_up():
+    threading.Timer(500,keep_up).start()
+    urllib.request.urlopen('https://dankmemes-bot.herokuapp.com/')
+    print('requested')
 
 
 @bot.message_handler(commands = ['start'])
@@ -61,6 +65,7 @@ def send_welcome(message):
 @bot.message_handler(func=lambda message: 'send 384252204' in message.text)
 def every24(message):
         send_photo()
+        keep_up()
         
 @server.route('/' + bot_token, methods=['POST'])
 def getMessage():
