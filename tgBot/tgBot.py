@@ -5,7 +5,7 @@ import praw
 import threading
 from flask import Flask, request
 
-bot_token = '835075644:AAERQCEPXSjpc-Z9SvZFPFcbPXNfiLUS3QI'
+bot_token = '835075644:AAEPAYlcnF9By_N9fuo8C4FlzOA5DyrfLr8'
 bot = telebot.TeleBot(token=bot_token)
 reddit = praw.Reddit(client_id= 'D1O4NdmXoZVNpg', client_secret= 'voQJq4BVb4DWL8WMFCsmiZRzou4', username= 'tgdankbot', password= 'Kutaluta@3crest', user_agent= 'v1' )
 sub1 = reddit.subreddit('dankmemes')
@@ -15,7 +15,6 @@ sub4 = reddit.subreddit('cursedimages')
 hot_memes = sub1.hot(limit=10)
 hot_yout = sub2.hot(limit=7)
 hot_curcom = sub3.hot(limit=7)
-hot_curimg = sub4.hot(limit=2)
 url_arr = []
 server = Flask(__name__)
 
@@ -32,9 +31,6 @@ def update_urls():
     for submission in hot_curcom:
         if not submission.stickied and 'jpg' in submission.url:
            url_arr.append(submission.url)
-    for submission in hot_curimg:
-        if not submission.stickied and 'jpg' in submission.url:
-            url_arr.append(submission.url)
     print(len(url_arr))
 
 def dl(url):
