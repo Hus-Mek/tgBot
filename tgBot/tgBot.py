@@ -47,6 +47,8 @@ def send_photo():
         img = open('pic.jpg','rb')
         bot.send_photo(chat_id ='@memesandautism',photo = img)
         img.close
+    urllib.request.urlopen('https://dankmemes-bot.herokuapp.com/')
+    print('requested')
 
 def keep_up():
     threading.Timer(500,keep_up).start()
@@ -57,6 +59,7 @@ def keep_up():
 @bot.message_handler(commands = ['start'])
 def send_welcome(message):
     bot.reply_to(message, 'Welcome, press /help for more information')
+    keep_up()
 
 @bot.message_handler(commands = ['help'])
 def send_welcome(message):
@@ -65,7 +68,6 @@ def send_welcome(message):
 @bot.message_handler(func=lambda message: 'send 384252204' in message.text)
 def every24(message):
         send_photo()
-        keep_up()
         
 @server.route('/' + bot_token, methods=['POST'])
 def getMessage():
