@@ -21,15 +21,15 @@ server = Flask(__name__)
 
 
 def update_urls():
-    del url_arr[:]
+    url_arr[:] = []
     for submission in hot_memes:
-        if not submission.stickied and 'jpg' in submission.url:
+        if 'jpg' in submission.url:
             url_arr.append(submission.url)
     for submission in hot_yout:
-        if not submission.stickied and 'jpg' in submission.url:
+        if 'jpg' in submission.url:
             url_arr.append(submission.url)
     for submission in hot_curcom:
-        if not submission.stickied and 'jpg' in submission.url:
+        if 'jpg' in submission.url:
            url_arr.append(submission.url)
     print(len(url_arr))
 
@@ -47,8 +47,7 @@ def send_photo():
         img = open('pic.jpg','rb')
         bot.send_photo(chat_id ='@memesandautism',photo = img)
         img.close
-    urllib.request.urlopen('https://dankmemes-bot.herokuapp.com/')
-    print('requested')
+    
 
 def keep_up():
     threading.Timer(500,keep_up).start()
