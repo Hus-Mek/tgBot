@@ -5,7 +5,7 @@ import praw
 import threading
 from flask import Flask, request
 
-bot_token = '835075644:AAEPAYlcnF9By_N9fuo8C4FlzOA5DyrfLr8'
+bot_token = 'your_bot_token'
 bot = telebot.TeleBot(token=bot_token)
 reddit = praw.Reddit(client_id= 'D1O4NdmXoZVNpg', client_secret= 'voQJq4BVb4DWL8WMFCsmiZRzou4', username= 'tgdankbot', password= 'Kutaluta@3crest', user_agent= 'v1' )
 sub1 = reddit.subreddit('dankmemes')
@@ -45,7 +45,7 @@ def send_photo():
     for i in range(0,count-1):
         dl(url_arr[i])
         img = open('pic.jpg','rb')
-        bot.send_photo(chat_id ='@memesandautism',photo = img)
+        bot.send_photo('channel/chat_id',photo = img)
         img.close
     
 
